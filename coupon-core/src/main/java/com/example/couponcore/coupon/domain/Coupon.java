@@ -23,4 +23,27 @@ public class Coupon {
     private LocalDateTime issueEndDate;
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
+
+    public boolean availableIssueQuantity() {
+        if (totalQuantity == null) {
+            return true;
+        }
+        return totalQuantity > issuedQuantity;
+    }
+
+    public boolean availableIssueDate() {
+        LocalDateTime now = LocalDateTime.now();
+        return issueStartDate.isBefore(now) && issueEndDate.isAfter(now);
+    }
+
+    public void issue() {
+        if (!availableIssueQuantity()) {
+            throw new RuntimeException("수량 검증");
+        }
+        if (!availableIssueDate()) {
+            throw new RuntimeException("기한 검증");
+        }
+
+        issuedQuantity++;
+    }
 }
