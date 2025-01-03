@@ -1,6 +1,8 @@
 package com.example.couponcore.coupon.domain;
 
 import com.example.couponcore.common.domain.enums.CouponType;
+import com.example.couponcore.coupon.domain.exception.CouponIssueException;
+import com.example.couponcore.coupon.domain.exception.ErrorCode;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,10 +40,10 @@ public class Coupon {
 
     public void issue() {
         if (!availableIssueQuantity()) {
-            throw new RuntimeException("수량 검증");
+            throw new CouponIssueException(ErrorCode.INVALID_COUPON_ISSUE_QUANTITY, "발급 가능한 수량을 초과합니다. total : %s, issued: %s".formatted(totalQuantity, issuedQuantity));
         }
         if (!availableIssueDate()) {
-            throw new RuntimeException("기한 검증");
+            throw new CouponIssueException(ErrorCode.INVALID_COUPON_ISSUE_DATE, "발급 가능한 일자가 아닙니다. request: %s, issueStart: %s, issueEnd: %s".formatted(LocalDateTime.now(), issueStartDate, issueEndDate));
         }
 
         issuedQuantity++;
