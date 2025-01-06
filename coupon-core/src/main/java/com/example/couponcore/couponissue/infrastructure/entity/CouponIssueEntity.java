@@ -1,10 +1,9 @@
 package com.example.couponcore.couponissue.infrastructure.entity;
 
 import com.example.couponcore.common.domain.entity.BaseTimeEntity;
+import com.example.couponcore.couponissue.domain.CouponIssue;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
@@ -12,6 +11,8 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder
 @Table(name = "coupon_issues")
 public class CouponIssueEntity extends BaseTimeEntity {
 
@@ -30,4 +31,14 @@ public class CouponIssueEntity extends BaseTimeEntity {
     private LocalDateTime issuedDate;
 
     private LocalDateTime usedDate;
+
+    public static CouponIssueEntity toEntity(CouponIssue couponIssue) {
+        return CouponIssueEntity.builder()
+                .id(couponIssue.getId())
+                .couponId(couponIssue.getCouponId())
+                .userId(couponIssue.getUserId())
+                .issuedDate(couponIssue.getIssuedDate())
+                .usedDate(couponIssue.getUsedDate())
+                .build();
+    }
 }

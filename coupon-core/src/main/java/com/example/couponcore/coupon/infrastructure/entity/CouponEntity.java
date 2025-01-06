@@ -2,16 +2,17 @@ package com.example.couponcore.coupon.infrastructure.entity;
 
 import com.example.couponcore.common.domain.entity.BaseTimeEntity;
 import com.example.couponcore.common.domain.enums.CouponType;
+import com.example.couponcore.coupon.domain.Coupon;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder
 @Table(name = "coupons")
 public class CouponEntity extends BaseTimeEntity {
 
@@ -43,5 +44,17 @@ public class CouponEntity extends BaseTimeEntity {
     private LocalDateTime issueEndDate;
 
 
-
+    public static CouponEntity toEntity(Coupon coupon) {
+        return CouponEntity.builder()
+                .id(coupon.getId())
+                .title(coupon.getTitle())
+                .couponType(coupon.getCouponType())
+                .totalQuantity(coupon.getTotalQuantity())
+                .issuedQuantity(coupon.getIssuedQuantity())
+                .discountAmount(coupon.getDiscountAmount())
+                .minAvailableAmount(coupon.getMinAvailableAmount())
+                .issueStartDate(coupon.getIssueStartDate())
+                .issueEndDate(coupon.getIssueEndDate())
+                .build();
+    }
 }

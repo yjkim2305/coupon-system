@@ -15,4 +15,8 @@ public class CouponService {
         return couponRepository.findById(couponId);
     }
 
+    public Coupon save(Coupon coupon) {
+        return couponRepository.save(coupon);
+    }
+
 }
