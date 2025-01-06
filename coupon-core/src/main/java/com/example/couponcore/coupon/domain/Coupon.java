@@ -3,6 +3,7 @@ package com.example.couponcore.coupon.domain;
 import com.example.couponcore.common.domain.enums.CouponType;
 import com.example.couponcore.coupon.domain.exception.CouponIssueException;
 import com.example.couponcore.coupon.domain.exception.ErrorCode;
+import com.example.couponcore.coupon.infrastructure.entity.CouponEntity;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -47,5 +48,21 @@ public class Coupon {
         }
 
         issuedQuantity++;
+    }
+
+    public static Coupon from(CouponEntity couponEntity) {
+        return Coupon.builder()
+                .id(couponEntity.getId())
+                .title(couponEntity.getTitle())
+                .couponType(couponEntity.getCouponType())
+                .totalQuantity(couponEntity.getTotalQuantity())
+                .issuedQuantity(couponEntity.getIssuedQuantity())
+                .discountAmount(couponEntity.getDiscountAmount())
+                .minAvailableAmount(couponEntity.getMinAvailableAmount())
+                .issueStartDate(couponEntity.getIssueStartDate())
+                .issueEndDate(couponEntity.getIssueEndDate())
+                .createdDate(couponEntity.getCreatedDate())
+                .updatedDate(couponEntity.getUpdatedDate())
+                .build();
     }
 }
