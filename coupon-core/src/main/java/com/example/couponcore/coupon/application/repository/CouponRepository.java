@@ -6,4 +6,5 @@ public interface CouponRepository {
 
     Coupon findById(Long id);
     Coupon save(Coupon coupon);
+    Coupon findByIdWithLock(Long id);
 }

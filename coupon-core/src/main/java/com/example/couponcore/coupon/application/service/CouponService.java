@@ -19,4 +19,8 @@ public class CouponService {
         return couponRepository.save(coupon);
     }
 
+    public Coupon getByIdWithLock(long couponId) {
+        return couponRepository.findByIdWithLock(couponId);
+    }
+
 }

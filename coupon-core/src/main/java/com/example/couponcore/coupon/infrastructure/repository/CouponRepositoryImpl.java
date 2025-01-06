@@ -26,4 +26,11 @@ public class CouponRepositoryImpl implements CouponRepository {
         CouponEntity couponEntity = couponJpaRepository.save(CouponEntity.toEntity(coupon));
         return Coupon.from(couponEntity);
     }
+
+    @Override
+    public Coupon findByIdWithLock(Long id) {
+        return couponJpaRepository.findCouponWithLock(id)
+                .map(Coupon::from)
+                .orElseThrow(() -> new CouponIssueException(ErrorCode.COUPON_NOT_EXIST, "쿠폰 정책이 존재하지 않습니다. %s".formatted(id)));
+    }
 }
