@@ -1,5 +1,6 @@
 package com.example.couponapi.service;
 
+import com.example.couponcore.common.component.DistributeLockExecutor;
 import com.example.couponcore.coupon.application.facade.CouponFacade;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -11,11 +12,16 @@ import org.springframework.stereotype.Service;
 public class CouponIssueRequestService {
 
     private final CouponFacade couponFacade;
+    private final DistributeLockExecutor distributeLockExecutor;
 
     private final Logger log = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     public void issueRequestV1(long couponId, long userId) {
-        couponFacade.issue(couponId, userId);
+
+        distributeLockExecutor.execute("lock_" + couponId,10000, 10000,  () -> {
+            couponFacade.issue(couponId, userId);
+        });
+
         log.info("쿠폰 발급 완료. couponId: %s, userId: %s".formatted(couponId, userId));
     }
 }
