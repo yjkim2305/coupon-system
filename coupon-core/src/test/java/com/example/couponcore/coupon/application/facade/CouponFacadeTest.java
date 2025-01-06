@@ -76,36 +76,6 @@ class CouponFacadeTest extends TestConfig {
     }
 
     @Test
-    @DisplayName("쿠폰 발급 내역이 존재하지 않는다면 쿠폰을 발급한다")
-    void test2() {
-        //given
-        Coupon coupon = Coupon.builder()
-                .title("선착순 쿠폰")
-                .couponType(CouponType.FIRST_COME_FIRST_SERVED)
-                .totalQuantity(100)
-                .issuedQuantity(0)
-                .discountAmount(1000)
-                .minAvailableAmount(1000)
-                .issueStartDate(LocalDateTime.now().minusDays(1))
-                .issueEndDate(LocalDateTime.now().plusDays(2))
-                .build();
-
-        couponJpaRepository.save(CouponEntity.toEntity(coupon));
-
-        CouponIssue couponIssue = CouponIssue.builder()
-                .couponId(1L)
-                .userId(1L)
-                .build();
-
-
-        //when
-        couponFacade.issue(couponIssue.getCouponId(), couponIssue.getUserId());
-
-        //then
-        assertTrue(couponIssueJpaRepository.findById(couponIssue.getCouponId()).isPresent());
-    }
-
-    @Test
     @DisplayName("발급 수량, 기한, 중복 발급 문제가 없다면 쿠폰을 발급한다")
     void issue_1() {
         long userId = 1;
