@@ -22,9 +22,8 @@ public class AsyncCouponFacadeV2 {
     private final CouponCacheService couponCacheService;
 
     public void issue(long couponId, long userId) {
-        CouponRedisEntity coupon = couponCacheService.getCouponCache(couponId);
+        CouponRedisEntity coupon = couponCacheService.getCouponLocalCache(couponId);
         coupon.checkIssuableCoupon();
         couponRedisService.issueRequestScript(couponId, userId, coupon.totalQuantity());
-
     }
 }
