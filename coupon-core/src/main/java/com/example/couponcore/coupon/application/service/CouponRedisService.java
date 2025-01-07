@@ -30,4 +30,11 @@ public class CouponRedisService {
         }
 
     }
+
+    public void issueRequestScript(long couponId, long userId, Integer totalIssueQuantity) {
+        if (totalIssueQuantity == null) {
+            redisRepository.issueRequest(couponId, userId, Integer.MAX_VALUE);
+        }
+        redisRepository.issueRequest(couponId, userId, totalIssueQuantity);
+    }
 }
