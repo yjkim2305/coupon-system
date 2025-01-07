@@ -1,9 +1,9 @@
 package com.example.couponcore.coupon.application.service.dto;
 
 import com.example.couponcore.common.domain.enums.CouponType;
+import com.example.couponcore.coupon.domain.Coupon;
 import com.example.couponcore.coupon.domain.exception.CouponIssueException;
 import com.example.couponcore.coupon.domain.exception.ErrorCode;
-import com.example.couponcore.coupon.infrastructure.entity.CouponEntity;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -16,6 +16,8 @@ public record CouponRedisEntity(
         CouponType couponType,
         Integer totalQuantity,
 
+        boolean availableIssueQuantity,
+
         @JsonSerialize(using = LocalDateTimeSerializer.class)
         @JsonDeserialize(using = LocalDateTimeDeserializer.class)
         LocalDateTime issueStartDate,
@@ -24,13 +26,14 @@ public record CouponRedisEntity(
         @JsonDeserialize(using = LocalDateTimeDeserializer.class)
         LocalDateTime issueEndDate
 ) {
-    public CouponRedisEntity(CouponEntity couponEntity){
+    public CouponRedisEntity(Coupon coupon){
         this(
-                couponEntity.getId(),
-                couponEntity.getCouponType(),
-                couponEntity.getTotalQuantity(),
-                couponEntity.getIssueStartDate(),
-                couponEntity.getIssueEndDate()
+                coupon.getId(),
+                coupon.getCouponType(),
+                coupon.getTotalQuantity(),
+                coupon.availableIssueQuantity(),
+                coupon.getIssueStartDate(),
+                coupon.getIssueEndDate()
         );
     }
 
@@ -40,6 +43,10 @@ public record CouponRedisEntity(
     }
 
     public void checkIssuableCoupon() {
+        if (!availableIssueQuantity) {
+            throw new CouponIssueException(ErrorCode.INVALID_COUPON_ISSUE_QUANTITY, "모든 발급 수량이 소진되었습니다. couponId: %s".formatted(id));
+        }
+
         if (!availableIssueDate()) {
             throw new CouponIssueException(ErrorCode.INVALID_COUPON_ISSUE_DATE, "발급 가능한 일자가 아닙니다. couponId: %s, issueStart:%s, issueEnd:%s".formatted(id, issueStartDate, issueEndDate));
         }

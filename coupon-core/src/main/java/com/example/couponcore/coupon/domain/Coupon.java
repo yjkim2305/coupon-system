@@ -50,6 +50,11 @@ public class Coupon {
         issuedQuantity++;
     }
 
+    public boolean isIssueComplete() {
+        LocalDateTime now = LocalDateTime.now();
+        return issueEndDate.isBefore(now) || !availableIssueQuantity();
+    }
+
     public static Coupon from(CouponEntity couponEntity) {
         return Coupon.builder()
                 .id(couponEntity.getId())
