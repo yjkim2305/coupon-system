@@ -2,6 +2,7 @@ package com.example.couponapi.service;
 
 import com.example.couponcore.common.component.DistributeLockExecutor;
 import com.example.couponcore.coupon.application.facade.CouponFacade;
+import com.example.couponcore.coupon.application.facade.AsyncCouponFacadeV1;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +14,7 @@ public class CouponIssueRequestService {
 
     private final CouponFacade couponFacade;
     private final DistributeLockExecutor distributeLockExecutor;
+    private final AsyncCouponFacadeV1 asyncCouponFacadeV1;
 
     private final Logger log = LoggerFactory.getLogger(this.getClass().getSimpleName());
 
@@ -24,4 +26,9 @@ public class CouponIssueRequestService {
 
         log.info("쿠폰 발급 완료. couponId: %s, userId: %s".formatted(couponId, userId));
     }
+
+    public void asyncIssueRequestV1(long couponId, long userId) {
+        asyncCouponFacadeV1.issue(couponId, userId);
+    }
+
 }
